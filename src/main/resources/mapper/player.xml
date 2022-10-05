@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.metacoding.red.domain.player.PlayerDao">
+
+	<insert id="insert">
+		INSERT INTO player(id, playername, position, teamId,
+		createdAt)
+		Values(player_seq.nextval, #{playername}, #{position},
+		#{teamId}, sysdate)
+	</insert>
+
+	<select id="findById"
+		resultType="site.metacoding.red.domain.player.Player">
+
+	</select>
+
+	<select id="findByTeamId"
+		resultType="site.metacoding.red.web.dto.response.player.MainDto">
+		SELECT ROWNUM, list.* FROM
+		(
+		SELECT p.id, playername,
+		position, teamname, stadiumname, p.teamId FROM baseteam t
+		INNER JOIN
+		stadium s ON s.teamId = t.id
+		INNER JOIN player p ON p.teamId = t.id
+		ORDER BY t.id
+		) list
+		<if test="teamId == null">
+			WHERE teamId is not null
+		</if>
+		<if test="teamId > 0">
+			WHERE teamId = #{teamId}
+		</if>
+	</select>
+
+	<select id="findAll"
+		resultType="site.metacoding.red.web.dto.response.player.MainDto">
+		SELECT ROWNUM, list.* FROM
+		(
+		SELECT p.id, playername,
+		position, teamname, stadiumname, p.teamId FROM baseteam t
+		INNER JOIN
+		stadium s ON s.teamId = t.id
+		INNER JOIN player p ON p.teamId = t.id
+		ORDER BY t.id
+		) list
+	</select>
+
+	<update id="update">
+
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM player WHERE id = #{id}
+	</delete>
+
+</mapper>
