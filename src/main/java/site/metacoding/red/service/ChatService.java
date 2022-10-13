@@ -32,6 +32,7 @@ public class ChatService {
     }
 
     public List<ChatRoom> findAllRoom() {
+        System.out.println(chatRooms.values());
         return new ArrayList<>(chatRooms.values());
     }
 
@@ -50,7 +51,7 @@ public class ChatService {
     }
 
     public <T> void sendMessage(WebSocketSession session, T message) {
-        try{
+        try {
             session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
         } catch (IOException e) {
             log.error(e.getMessage(), e);
